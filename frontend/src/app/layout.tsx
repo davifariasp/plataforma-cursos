@@ -1,3 +1,4 @@
+import { AuthProvider } from '@/context/AuthContext';
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
@@ -19,7 +20,9 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={inter.className}>
         <Toaster />
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

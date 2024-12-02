@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-hot-toast';
-import { api } from '@/lib/api';
-import { useAuth } from '@/lib/auth';
-import { CourseCard } from './components/CourseCard';
-import { Header } from './components/Header';
-import { Client } from '@stomp/stompjs';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
+import { api } from "@/lib/api";
+import { useAuth } from "@/lib/auth";
+import { CourseCard } from "./components/CourseCard";
+import { Header } from "./components/Header";
+import { Client } from "@stomp/stompjs";
 
 export default function CoursesPage() {
   const router = useRouter();
@@ -23,13 +23,13 @@ export default function CoursesPage() {
 
         setCourses(data);
       } catch (error) {
-        toast.error('Erro ao buscar cursos');
+        toast.error("Erro ao buscar cursos");
       } finally {
         setIsLoading(false);
       }
     };
     fetchCourses();
-  });
+  }, []);
 
   useEffect(() => {
     // Verificar se o `user` e `cpf` estão carregados
@@ -42,21 +42,21 @@ export default function CoursesPage() {
 
   useEffect(() => {
     const client = new Client({
-      brokerURL: 'ws://localhost:8082/ws-endpoint',
+      brokerURL: "ws://localhost:8082/ws-endpoint",
       connectHeaders: {
         // Se precisar enviar um token de autenticação, adicione aqui
       },
       onConnect: () => {
-        client.subscribe('/topic', (message) => {
+        client.subscribe("/topic", (message) => {
           const updatedCourses = JSON.parse(message.body);
 
           setCourses(updatedCourses);
         });
       },
     });
-  
+
     client.activate();
-  
+
     return () => {
       client.deactivate();
     };
@@ -67,7 +67,7 @@ export default function CoursesPage() {
       const data = await api.courses.listInscricoes(user.cpf);
       setInscricoes(data);
     } catch (error) {
-      toast.error('Erro ao buscar inscrições');
+      toast.error("Erro ao buscar inscrições");
     } finally {
       setIsLoading(false);
     }
@@ -75,21 +75,20 @@ export default function CoursesPage() {
 
   const handleLogout = () => {
     clearAuth();
-    router.push('/login');
+    router.push("/login");
   };
 
   const handleEnroll = async (cursoId: string) => {
-
     const credentials = {
       idCurso: cursoId,
       cpf: user.cpf,
-    }
+    };
 
     try {
       await api.courses.enroll(credentials);
       await fetchInscricoes();
     } catch (error: any) {
-      toast.error('Erro ao se inscrever');
+      toast.error("Erro ao se inscrever");
     }
   };
 
