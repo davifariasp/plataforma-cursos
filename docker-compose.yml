@@ -1,0 +1,19 @@
+services:
+  postgres:
+    container_name: pg-fiesc
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 'pgpass'
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 5432:5432
+
+  rabbitmq:
+    container_name: rabbit-fiesc
+    image: rabbitmq:management
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
