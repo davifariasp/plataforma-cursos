@@ -8,8 +8,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { api } from "@/lib/api";
-import { useAuth } from "@/lib/auth";
+import { api } from "@/services/api";
+import { useAuth } from "@/hooks/useAuth";
 
 const nameRegex = /^[A-Z][a-z]+ [A-Z][a-z]+( [A-Z][a-z]+)*$/;
 const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
@@ -42,7 +42,7 @@ const registerSchema = z.object({
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { setAuth } = useAuth();
+  const { handleLogin } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -62,7 +62,9 @@ export default function RegisterPage() {
         senha: data.senha,
       };
       const response = await api.auth.register(formattedData);
-      setAuth(response.user, response.accessToken, response.expiresIn);
+
+      await handleLogin(formattedData.cpf, formattedData.senha);
+
       router.push("/cursos");
     } catch (error: any) {
       // toast({

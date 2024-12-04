@@ -3,18 +3,22 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-import { api } from "@/lib/api";
-import { useAuth } from "@/lib/auth";
+import { api } from "@/services/api";
+//import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/hooks/useAuth";
+import { getUser } from "@/services/authService";
 import { CourseCard } from "./components/CourseCard";
 import { Header } from "./components/Header";
 import { Client } from "@stomp/stompjs";
 
 export default function CoursesPage() {
   const router = useRouter();
-  const { user, clearAuth } = useAuth();
+  const { handleLogout } = useAuth();
   const [courses, setCourses] = useState([]);
   const [inscricoes, setInscricoes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const user = getUser();
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -38,7 +42,7 @@ export default function CoursesPage() {
     } else {
       setIsLoading(false); // Garantir que o loading seja removido
     }
-  }, [user]);
+  },[]);
 
   useEffect(() => {
     const client = new Client({
@@ -73,16 +77,13 @@ export default function CoursesPage() {
     }
   };
 
-  const handleLogout = () => {
-    clearAuth();
-    router.push("/login");
-  };
-
   const handleEnroll = async (cursoId: string) => {
     const credentials = {
       idCurso: cursoId,
       cpf: user.cpf,
     };
+
+    console.log(credentials);
 
     try {
       await api.courses.enroll(credentials);

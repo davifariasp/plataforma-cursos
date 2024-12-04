@@ -8,9 +8,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { api } from "@/lib/api";
-import { useAuth } from "@/lib/auth";
-import { useAuthContext } from '@/context/AuthContext'
+import { useAuthContext } from "@/context/AuthContext";
 
 const loginSchema = z.object({
   login: z.string().min(1, "CPF ou E-mail é obrigatório"),
@@ -19,7 +17,6 @@ const loginSchema = z.object({
 
 export default function LoginPage() {
   const router = useRouter();
-  const { setAuth } = useAuth();
   const { handleLogin } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,9 +37,7 @@ export default function LoginPage() {
       };
       //const response = await api.auth.login(credentials);
 
-      const r = await handleLogin(credentials.login, credentials.senha)
-
-      console.log(r)
+      await handleLogin(credentials.login, credentials.senha);
 
       //setAuth(response.user, response.accessToken, response.expiresIn);
       router.push("/cursos");

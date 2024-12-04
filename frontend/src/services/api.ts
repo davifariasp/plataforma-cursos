@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useAuth } from "./auth";
+import { getToken } from "@/services/authService";
 
 const authApi = axios.create({
   baseURL: "http://localhost:8081",
@@ -11,7 +11,8 @@ const courseApi = axios.create({
 
 // Add request interceptor to include auth token
 courseApi.interceptors.request.use((config) => {
-  const { token } = useAuth.getState();
+  const token = getToken("authToken");
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

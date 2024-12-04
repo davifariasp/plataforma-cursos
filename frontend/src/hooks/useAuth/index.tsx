@@ -1,6 +1,5 @@
 import {login, setToken, setUser, clearToken} from "@/services/authService";
 import { useRouter } from 'next/navigation'
-import Cookies from 'js-cookie'
 
 export function useAuth() {
     const router = useRouter()
