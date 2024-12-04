@@ -30,7 +30,7 @@ public class Curso {
     @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Inscricao> inscricoes = new ArrayList<>();
 
-    public boolean decrementarVagas() {
+    public synchronized boolean decrementarVagas() {
         if (numeroVagas > 0) {
             numeroVagas--;
             return true;

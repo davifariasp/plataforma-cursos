@@ -12,6 +12,7 @@ import com.example.api.repositories.PessoaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class InscricaoService {
     CursoService cursoService;
 
     @Transactional
+    @Async
     public InscricaoResponseDto inscrever(InscricaoRequestDto request) {
         Curso curso = cursoRepository.findById(request.idCurso()).orElseThrow();
         Pessoa pessoa = pessoaRepository.findByCpf(request.cpf()).orElseThrow();

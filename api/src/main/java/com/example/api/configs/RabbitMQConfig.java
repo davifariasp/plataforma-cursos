@@ -27,6 +27,7 @@ public class RabbitMQConfig {
 
         factory.setConnectionFactory(connectionFactory);
         factory.setErrorHandler(new ConsumerErrorHandler());
+        factory.setMessageConverter(messageConverter());
         return factory;
     }
 
